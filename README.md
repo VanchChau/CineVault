@@ -1,2 +1,2 @@
 # CineVault
-Movie database using tmdb
+Movie database using tmdb and Amazon S3
