@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CineVault — Discover Movies</title>
+  <meta name="description"
+    content="CineVault: Search, discover, and track millions of movies. Build watchlists, rate films, and play movie games." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;800&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <!-- ── Toast notifications ── -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- ── Navbar ── -->
+  <nav class="navbar" id="navbar">
+    <div class="navbar__logo" id="logo-btn">Cine<span>Vault</span></div>
+    <div class="navbar__search-wrap" id="navbar-search-wrap">
+      <div class="nav-search-box">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <circle cx="11" cy="11" r="8" />
+          <path d="m21 21-4.35-4.35" />
+        </svg>
+        <input id="nav-search-input" type="text" placeholder="Search movies…" autocomplete="off" />
+        <div id="nav-dropdown" class="live-dropdown hidden"></div>
+      </div>
+    </div>
+    <div class="navbar__actions">
+      <button class="btn-nav" id="btn-watchlist" title="Watchlist">🔖 <span class="desktop-only">Watchlist</span> <span
+          class="badge" id="watchlist-badge" style="display:none"></span></button>
+      <button class="btn-nav" id="btn-favorites" title="Favorites">❤️ <span
+          class="desktop-only">Favorites</span></button>
+      <button class="btn-nav" id="btn-streak" title="Streak">🔥</button>
+      <button class="btn-nav" id="btn-bingo" title="Movie Bingo">🎯</button>
+      <button class="btn-nav" id="btn-tier" title="Tier List">🏆</button>
+      <button class="btn-nav theme-toggle" id="btn-theme" title="Toggle Theme">🌙</button>
+      <button class="btn-nav btn-about" id="btn-about" title="About the creator">👤 <span
+          class="desktop-only">About</span></button>
+    </div>
+  </nav>
+
+  <!-- ── Hero ── -->
+  <header class="hero" id="hero">
+    <div class="hero__bg" id="hero-bg"></div>
+    <div class="hero__content">
+      <p class="hero__eyebrow">Your Personal Cinema</p>
+      <h1 class="hero__title">Discover <span class="hero__title-accent">Every</span> Story.</h1>
+      <p class="hero__sub">Search millions of movies. Build lists. Track what you love.</p>
+      <div class="hero__search-row">
+        <div class="hero__search-box">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <circle cx="11" cy="11" r="8" />
+            <path d="m21 21-4.35-4.35" />
+          </svg>
+          <input id="hero-search-input" type="text" placeholder="Search for a movie, actor, franchise…"
+            autocomplete="off" />
+          <div id="hero-dropdown" class="live-dropdown hidden"></div>
+        </div>
+        <button class="btn-surprise" id="btn-surprise" title="Surprise me!">🎲</button>
+      </div>
+      <div class="mood-bar" id="mood-bar">
+        <button class="mood-chip" data-genre="28">💥 Action</button>
+        <button class="mood-chip" data-genre="35">😂 Comedy</button>
+        <button class="mood-chip" data-genre="18">😢 Drama</button>
+        <button class="mood-chip" data-genre="27">👻 Horror</button>
+        <button class="mood-chip" data-genre="878">🚀 Sci-Fi</button>
+        <button class="mood-chip" data-genre="14">🔮 Fantasy</button>
+        <button class="mood-chip" data-genre="53">😰 Thriller</button>
+        <button class="mood-chip" data-genre="10749">❤️ Romance</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── Main content ── -->
+  <main class="main" id="main-content">
+
+    <!-- Search results section -->
+    <section class="section hidden" id="search-section">
+      <div class="section__header">
+        <h2 class="section__title" id="search-title">Results</h2>
+        <div class="search-controls">
+          <select id="sort-select" class="sort-select">
+            <option value="popularity.desc">Most Popular</option>
+            <option value="vote_average.desc">Top Rated</option>
+            <option value="release_date.desc">Newest</option>
+            <option value="release_date.asc">Oldest</option>
+          </select>
+        </div>
+      </div>
+      <div class="movie-grid" id="search-grid"></div>
+      <div class="load-more-row" id="search-more-row">
+        <button class="btn-load-more" id="btn-load-more">Load More</button>
+      </div>
+    </section>
+
+    <!-- Trending now -->
+    <section class="section" id="trending-section">
+      <div class="section__header">
+        <h2 class="section__title">🔥 Trending Now</h2>
+        <span class="section__pill">Live</span>
+      </div>
+      <div class="rec-scroll" id="trending-grid"></div>
+    </section>
+
+    <!-- Top Rated -->
+    <section class="section" id="toprated-section">
+      <div class="section__header">
+        <h2 class="section__title">⭐ Top Rated</h2>
+        <span class="section__pill">IMDb</span>
+      </div>
+      <div class="rec-scroll" id="toprated-grid"></div>
+    </section>
+
+    <!-- Now Playing -->
+    <section class="section" id="nowplaying-section">
+      <div class="section__header">
+        <h2 class="section__title">🎬 Now Playing</h2>
+        <span class="section__pill">Cinemas</span>
+      </div>
+      <div class="rec-scroll" id="nowplaying-grid"></div>
+    </section>
+
+    <!-- Upcoming -->
+    <section class="section" id="upcoming-section">
+      <div class="section__header">
+        <h2 class="section__title">🗓️ Coming Soon</h2>
+        <span class="section__pill">2025</span>
+      </div>
+      <div class="rec-scroll" id="upcoming-grid"></div>
+    </section>
+
+  </main>
+
+  <!-- ── Movie Detail Modal ── -->
+  <div class="modal-overlay hidden" id="movie-modal">
+    <div class="modal" id="modal-box">
+      <button class="modal__close" id="modal-close">✕</button>
+      <div class="modal__backdrop" id="modal-backdrop"></div>
+      <div class="modal__body">
+        <img class="modal__poster" id="modal-poster" src="" alt="" />
+        <div class="modal__info">
+          <div class="modal__chips" id="modal-chips"></div>
+          <h2 class="modal__title" id="modal-title"></h2>
+          <div class="modal__ratings" id="modal-ratings"></div>
+          <div class="modal__tabs">
+            <button class="modal-tab active" data-tab="overview">Overview</button>
+            <button class="modal-tab" data-tab="similar">Similar</button>
+            <button class="modal-tab" data-tab="director">Director</button>
+          </div>
+          <div class="modal__tab-content" id="modal-tab-overview"></div>
+          <div class="modal__tab-content hidden" id="modal-tab-similar"></div>
+          <div class="modal__tab-content hidden" id="modal-tab-director"></div>
+          <div class="modal__actions" id="modal-actions"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Side Panel (shared) ── -->
+  <div class="side-overlay hidden" id="side-overlay"></div>
+  <aside class="side-panel hidden" id="side-panel">
+    <div class="side-panel__header">
+      <h3 class="side-panel__title" id="side-panel-title"></h3>
+      <button class="side-panel__close" id="side-panel-close">✕</button>
+    </div>
+    <div class="side-panel__body" id="side-panel-body"></div>
+  </aside>
+
+  <!-- ── Bingo Modal ── -->
+  <div class="modal-overlay hidden" id="bingo-modal">
+    <div class="bingo-box">
+      <div class="side-panel__header">
+        <h3 class="side-panel__title">🎯 Movie Bingo</h3>
+        <button class="side-panel__close" id="bingo-close">✕</button>
+      </div>
+      <div id="bingo-win-banner" class="bingo-win hidden">🎉 BINGO! Congratulations!</div>
+      <div class="bingo-grid" id="bingo-grid"></div>
+      <p class="bingo-score" id="bingo-score"></p>
+    </div>
+  </div>
+
+  <!-- ── Tier List Modal ── -->
+  <div class="modal-overlay hidden" id="tier-modal">
+    <div class="tier-box">
+      <div class="side-panel__header">
+        <h3 class="side-panel__title">🏆 Tier List</h3>
+        <button class="side-panel__close" id="tier-close">✕</button>
+      </div>
+      <div class="tier-container" id="tier-container"></div>
+      <div class="tier-unranked-label">UNRANKED — drag posters to a tier</div>
+      <div class="tier-movies" id="tier-unranked" style="flex-wrap:wrap;padding:12px;min-height:60px;"></div>
+    </div>
+  </div>
+  <!-- ── About Modal ── -->
+  <div class="modal-overlay hidden" id="about-modal">
+    <div class="about-box">
+      <div class="side-panel__header">
+        <h3 class="side-panel__title">👤 About the Creator</h3>
+        <button class="side-panel__close" id="about-close">✕</button>
+      </div>
+      <div class="about-body">
+        <div class="about-avatar">V</div>
+        <h2 class="about-name">Vansh</h2>
+        <p class="about-role">B.Tech CSE · VIT Vellore</p>
+        <p class="about-text">
+          I designed and built CineVault as a semester project: a movie discovery app
+          with search, watchlists, favorites, and movie games, powered by the TMDB API.
+        </p>
+        <div class="about-tags">
+          <span>HTML</span><span>CSS</span><span>JavaScript</span><span>TMDB API</span>
+        </div>
+        <div class="about-links">
+          <a href="https://github.com/VanchChau" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://www.linkedin.com/in/vansh-chaudhry-31794a333/" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+        <p class="about-credit">This product uses the TMDB API but is not endorsed or certified by TMDB.</p>
+      </div>
+    </div>
+  </div>
+  <!-- ── Scripts ── -->
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+
+</html>
